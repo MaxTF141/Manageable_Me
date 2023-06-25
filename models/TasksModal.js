@@ -1,0 +1,95 @@
+// ==========Tasks==========
+const sql = require('./db.js')
+
+const Tasks = function(task) {
+    this.TaskTitle = task.TaskTitle;
+    this.TaskDescription = task.TaskDescription;
+    this.DueDate = task.DueDate;
+};
+
+Tasks.create = (UserID, task, result) => {
+  sql.query("INSERT INTO Tasks (UserID, TaskTitle, TaskDescription, DueDate, CreatedAt, UpdatedAt) VALUES(?, ?, ?, ?, current_date(), current_date())", [UserID, task.TaskTitle, task.TaskDescription, task.DueDate], (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    console.log("created task: ", { id: res.insertId, ...task });
+    result(null, res);
+  });
+};
+
+Tasks.findById = (id, task, result) => {
+  sql.query(`SELECT * FROM Tasks WHERE TaskID = ? AND UserID = ?`, [id, task.UserID], (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found task: ", res[0]);
+      result(null, res[0]);
+      return;
+    }
+
+    // not found Tasks with the id
+    result({ kind: "not_found" }, null);
+  });
+};
+
+Tasks.getAll = (id, result) => {
+  sql.query(`SELECT * FROM Tasks WHERE UserID = ? `, [id], (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    console.log("Tasks: ", id);
+    result(null, res);
+  });
+};
+
+Tasks.updateById = (id, task, result) => {
+    sql.query('UPDATE Tasks SET TaskTitle = ?, TaskDescription = ?, DueDate = ?, UpdatedAt = current_time() WHERE TaskID = ?', [task.TaskTitle, task.TaskDescription, task.DueDate, id],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        // not found Tasks with the id
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("updated task: ", { id: id, ...task });
+      result(null, { id: id, ...task });
+    }
+  );
+};
+
+Tasks.remove = (id, result) => {
+  sql.query("DELETE FROM Tasks WHERE TaskID = ?", [id], (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.affectedRows == 0) {
+      result({ kind: "not_found" }, null);
+      return;
+    }
+
+    console.log("deleted task with id: ", id);
+    result(null, res);
+  });
+};
+
+
+module.exports = Tasks;

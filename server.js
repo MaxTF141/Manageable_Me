@@ -1,0 +1,36 @@
+const express = require("express");
+const cors = require("cors");
+const cookieParser = require('cookie-parser')
+
+const app = express();
+
+var corsOptions = {
+  origin: "https://dead-mans-tales.web.app",
+  methods: ['GET', 'POST', 'DELETE', 'PUT'],
+  headers: ['Origin','X-Requested-With','Accept','Content-type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
+
+
+// parse requests of content-type - application/json
+app.use(
+  cookieParser(),
+  express.json());
+
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
+// simple route
+app.get('/', function(req, res) {
+  res.sendFile(__dirname + '/views/index.html');
+});
+
+
+require("./routes/routes.js")(app);
+
+// set port, listen for requests
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+});
