@@ -45,15 +45,15 @@ exports.findAll = (req, res) => {
 
 // Find a single Task with a id
 exports.findOne = (req, res) => {
-    Task.findById(req.params.user, (err, data) => {
+    Task.findById(req.params.task, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
-                    message: `Not found Task with id ${req.params.user}.`
+                    message: `Not found Task with id ${req.params.task}.`
                 });
             } else {
                 res.status(500).send({
-                    message: "Error retrieving Task with id " + req.params.user
+                    message: "Error retrieving Task with id " + req.params.task
                 });
             }
         } else res.send(data);
@@ -71,15 +71,15 @@ exports.update = (req, res) => {
 
     console.log(req.body);
 
-    Task.updateById(req.params.user, new Task(req.body), (err, data) => {
+    Task.updateById(req.params.task, new Task(req.body), (err, data) => {
             if (err) {
                 if (err.kind === "not_found") {
                     res.status(404).send({
-                        message: `Not found Task with id ${req.params.user}.`
+                        message: `Not found Task with id ${req.params.task}.`
                     });
                 } else {
                     res.status(500).send({
-                        message: "Error updating Task with id " + req.params.user
+                        message: "Error updating Task with id " + req.params.task
                     });
                 }
             } else res.send(data);
@@ -89,15 +89,15 @@ exports.update = (req, res) => {
 
 // Delete a Task with the specified id in the request
 exports.delete = (req, res) => {
-    Task.remove(req.params.user, (err, data) => {
+    Task.remove(req.params.task, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
-                    message: `Not found Task with id ${req.params.user}.`
+                    message: `Not found Task with id ${req.params.task}.`
                 });
             } else {
                 res.status(500).send({
-                    message: "Could not delete Task with id " + req.params.user
+                    message: "Could not delete Task with id " + req.params.task
                 });
             }
         } else res.send({ message: `Task was deleted successfully!` });

@@ -2,12 +2,11 @@
 const sql = require('./db.js');
 
 const Subtasks = function(subtask) {
-    this.subDescription = subtask.subDescription;
-    this.TaskID = subtask.TaskID
+    this.SubDescription = subtask.SubDescription;
 };
 
-Subtasks.create = (subtask, result) => {
-    sql.query("INSERT INTO Subtask (TaskID, SubDescription) VALUES(?, ?)", [subtask.TaskID, subtask.subDescription], (err, res)=>{
+Subtasks.create = (id, subtask, result) => {
+    sql.query("INSERT INTO Subtask (TaskID, SubDescription) VALUES(?, ?)", [id, subtask.SubDescription], (err, res)=>{
         if(err) {
             console.log('error:' , err);
             result(err, null);
@@ -20,7 +19,7 @@ Subtasks.create = (subtask, result) => {
 };
 
 Subtasks.findById = (id, result) => {
-    sql.query('SELECT * FROM SubTask WHERE subtaskID = ? AND TaskID = ?', [id], (err, res) => {
+    sql.query('SELECT * FROM Subtask WHERE subtaskID = ?', [id], (err, res) => {
         if(err) {
             console.log('error: ', err);
             result(err, null);

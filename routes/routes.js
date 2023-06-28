@@ -35,28 +35,28 @@ module.exports = app => {
     
     // Tasks  routes
     const tasks = require('../controllers/TasksController.js');
-    router.post("/user/:user/tasks/", tasks.create);
+    router.post("/user/:user/tasks/", verifyAToken, requireAuth, tasks.create);
   
     router.get("/user/:user/tasks", tasks.findAll);
 
     router.get("/user/:user/tasks/:task", tasks.findOne);
   
-    router.put("/user/:user/tasks/:task", tasks.update);
+    router.put("/user/:user/tasks/:task", verifyAToken, requireAuth, tasks.update);
   
-    router.delete("/user/:user/tasks/:task", tasks.delete);
+    router.delete("/user/:user/tasks/:task", verifyAToken, requireAuth, tasks.delete);
 
     
     // Subtasks routes
     const subtasks = require('../controllers/SubTaskController.js');
-    router.post("/user/:user/tasks/:task/sub", subtasks.create);
+    router.post("/user/:user/tasks/:task/sub", verifyAToken, requireAuth, subtasks.create);
   
     router.get("/user/:user/tasks/:task/sub", subtasks.findAll);
 
     router.get("/user/:user/tasks/:task/sub/:sub", subtasks.findOne);
   
-    router.put("/user/:user/tasks/:task/sub/:sub", subtasks.update);
+    router.put("/user/:user/tasks/:task/sub/:sub", verifyAToken, requireAuth, subtasks.update);
   
-    router.delete("/user/:user/tasks/:task/sub/:sub", subtasks.delete);
+    router.delete("/user/:user/tasks/:task/sub/:sub", verifyAToken, requireAuth, subtasks.delete);
 
     app.use('/', router);
   };

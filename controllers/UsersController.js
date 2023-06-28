@@ -30,67 +30,79 @@ exports.create = async (req, res) => {
       });
     else {
       const jwt = createToken(user);
-      res.cookie('authorization_token', jwt, {
-        maxAge: 3600000,
-        httpOnly: false,
+      res.cookie('_token', jwt, {
+        maxAge: 3600000000,
+        httpOnly: true,
         path: '/',
+        sameSite: 'none',
+        secure: true
       });
       res.status(200).json({ message: "A user record was saved." })
     }
   });
 };
 
+const cookie = require('cookie');
+
 exports.loginUser = async (req, res) => {
+  User.login(req.body, async (err, data) => {
     const { UserEmail, UserPassword } = req.body;
-    User.login(req.body, async (err, data) => {
-      if (err) throw err;
-      if ((!data.length) || (data == null)) {
-        res.status(401).json({
-          err: "You provided a wrong email address"
+    if (err) throw err;
+    if ((!data.length) || (data == null)) {
+      res.status(401).json({
+        err: "You provided a wrong email address"
+      });
+    } else {
+      compare(UserPassword, data[0].UserPassword, (error, passwordMatch) => {
+        if (error) throw error;
+
+        // Create a token
+        const jwt = createToken({ UserEmail, UserPassword });
+
+        // Save the token as a cookie
+        res.cookie('_token', jwt, {
+          maxAge: 360000000,
+          httpOnly: true,
+          path: '/',
+          sameSite: 'none',
+          secure: false
         });
-      } else {
-        compare(UserPassword, data[0].UserPassword, (error, passwordMatch) => {
-          if (error) throw error;
-  
-          // Create a token
-          const jwt = createToken({ 
-            UserEmail, UserPassword 
-          });
-  
-          // Save the token as a cookie
-          res.cookie('authorization_token', jwt, {
-            maxAge: 3600000000,
-            httpOnly: true,
-            path: '/',
-            sameSite: 'none',
-            secure: true
-          });
-  
-          if (passwordMatch) {
-            const userData = data[0];
-            const userId = userData.userId;
-            const userRole = userData.userRole;
-            res.status(200).json({
-              message: 'Logged in',
-              jwt,
-              result: userData,
-              userId,
-              userRole
-            });
+
+        // Retrieve the cookie value from Set-Cookie header
+        const setCookieHeader = res.get('Set-Cookie');
+        if (setCookieHeader && setCookieHeader.length > 0) {
+          const parsedCookie = cookie.parse(setCookieHeader[0]);
+          const cookieValue = parsedCookie._token;
+          if (cookieValue) {
+            console.log(cookieValue);
           } else {
-            res.status(401).json({
-              err: 'You entered an invalid password or did not register.'
-            });
+            console.log('Cookie value is empty');
           }
-        });
-      }
-    });
-  };
-  
+        } else {
+          console.log('Set-Cookie header not found');
+        }
+
+        if (passwordMatch) {
+          const userData = data[0];
+          res.status(200).json({
+            message: 'Logged in',
+            jwt,
+            result: userData,
+          });
+        } else {
+          res.status(401).json({
+            err: 'You entered an invalid password or did not register.'
+          });
+        }
+      });
+    }
+  });
+};
+
+
 
 // Retrieve all User from the database (with condition).
 exports.findAll = (req, res) => {
-  const UserName = req.query.UserName;
   User.getAll((err, data) => {
     if (err)
       res.status(500).send({

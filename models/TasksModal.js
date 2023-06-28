@@ -20,8 +20,8 @@ Tasks.create = (UserID, task, result) => {
   });
 };
 
-Tasks.findById = (id, task, result) => {
-  sql.query(`SELECT * FROM Tasks WHERE TaskID = ? AND UserID = ?`, [id, task.UserID], (err, res) => {
+Tasks.findById = (id, result) => {
+  sql.query(`SELECT * FROM Tasks WHERE TaskID = ?`, [id], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -67,8 +67,8 @@ Tasks.updateById = (id, task, result) => {
         return;
       }
 
-      console.log("updated task: ", { id: id, ...task });
-      result(null, { id: id, ...task });
+      console.log("updated task: ", );
+      result(null, res);
     }
   );
 };

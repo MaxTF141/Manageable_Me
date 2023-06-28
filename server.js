@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser')
 const app = express();
 
 var corsOptions = {
-  origin: "https://dead-mans-tales.web.app",
+  origin: "*",
   methods: ['GET', 'POST', 'DELETE', 'PUT'],
   headers: ['Origin','X-Requested-With','Accept','Content-type', 'Authorization'],
 };

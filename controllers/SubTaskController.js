@@ -11,11 +11,10 @@ exports.create = (req, res) => {
     // Add a subtask
     const subtask = new Subtasks({
         SubDescription: req.body.SubDescription,
-        TaskID: req.body.TaskID,
     });
 
     // Save Task in the database
-    Subtasks.create(subtask, (err, data) => {
+    Subtasks.create(req.params.task, subtask, (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -40,17 +39,15 @@ exports.findAll = (req, res) => {
 
 // Find a single Task with a id
 exports.findOne = (req, res) => {
-    const subTaskID = req.params.sub;
-    const taskID = req.params.task;
-    Subtasks.findById(ubID, (err, data) => {
+    Subtasks.findById(req.params.sub , (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
-                    message: `Not found Subtask with id ${subTaskID}.`
+                    message: `Not found Subtask with id ${req.params.sub}.`
                 });
             } else {
                 res.status(500).send({
-                    message: "Error retrieving Subtask with id " + subTaskID
+                    message: "Error retrieving Subtask with id " + req.params.sub
                 });
             }
         } else res.send(data);
@@ -59,7 +56,6 @@ exports.findOne = (req, res) => {
 
 // Update a Task identified by the id in the request
 exports.update = (req, res) => {
-    const subTaskID = req.params.sub;
     // Validate Request
     if (!req.body) {
         res.status(400).send({
@@ -69,15 +65,15 @@ exports.update = (req, res) => {
 
     console.log(req.body);
 
-    Subtasks.updateById(subTaskID, new Task(req.body),(err, data) => {
+    Subtasks.updateById(req.params.sub, new Subtasks(req.body),(err, data) => {
             if (err) {
                 if (err.kind === "not_found") {
                     res.status(404).send({
-                        message: `Not found Task with id ${subTaskID}.`
+                        message: `Not found Subtask with id ${req.params.sub}.`
                     });
                 } else {
                     res.status(500).send({
-                        message: "Error updating Task with id " + subTaskID
+                        message: "Error updating Task with id " + req.params.sub
                     });
                 }
             } else res.send(data);
@@ -87,15 +83,15 @@ exports.update = (req, res) => {
 
 // Delete a Task with the specified id in the request
 exports.delete = (req, res) => {
-    Subtasks.remove(req.params.id, (err, data) => {
+    Subtasks.remove(req.params.sub, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
-                    message: `Not found Task with id ${req.params.id}.`
+                    message: `Not found Task with id ${req.params.sub}.`
                 });
             } else {
                 res.status(500).send({
-                    message: "Could not delete Task with id " + req.params.id
+                    message: "Could not delete Task with id " + req.params.sub
                 });
             }
         } else res.send({ message: `Task was deleted successfully!` });
