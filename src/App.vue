@@ -14,12 +14,16 @@ export default {
 </script>
 
 <style>
-  #app {
-    background-color: #f4f4f4;
-    min-height: 100vh;
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400&display=swap');
+#app {
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+*,
+  *::after,
+  *::before {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
   }
-  /* #home {
-  } */
-
-
 </style>
