@@ -40,9 +40,15 @@
       <h2>Your Tasks</h2>
       <div class="single-task mx-auto d-flex flex-column justify-content-between">
         <h3 class="pt-3 ps-4">Research Accommodations</h3>
-        <div class="due-date ps-4 d-flex align-items-center gap-1">
-          <Icon icon="fluent-mdl2:date-time" color="#ffb23f" />
-          <h4>30 Jun 2023</h4>
+        <div class="icon-list d-flex justify-content-between w-75 gap-5 ps-4">
+          <div class="subtasks d-flex align-items-end">
+            <Icon icon="mdi:subtasks" color="#ffb23f" style="font-size: 1.5rem;"/>
+            <h4>6</h4>
+          </div>
+          <div class="due-date d-flex align-items-end">
+            <Icon icon="fluent-mdl2:date-time" color="#ffb23f" style="font-size: 1.5rem;"/>
+            <h4>30 Jun 2023</h4>
+          </div>
         </div>
         <div class="progress d-flex justify-content-between">
           <h5 class="ps-1 pb-5">Your progress</h5>
@@ -78,6 +84,10 @@ export default {
   margin: 0;
   box-sizing: border-box;
 }
+
+#task {
+  background-color: #f5f5f5;
+}
 h1 {
   font-family: 'Comfortaa', cursive;
   font-size: 2.25rem;
@@ -100,7 +110,7 @@ h3{
 
 h4{
   font-family: 'Comfortaa', cursive;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   font-weight: 400;
 }
 
@@ -111,7 +121,7 @@ h5{
 }
 
 input {
-  background-color: #f4f4f4;
+  background-color: #fff;
   border: 0px solid #f4f4f4;
   border-radius: 30px;
   height: 40px;
@@ -124,6 +134,7 @@ button {
   height: 40px;
   border-radius: 50%;
   background-color: #4d8ab2;
+  box-shadow: -0.2rem 0.2rem 0.6rem 0.2rem #4d8ab231;
   border: 0px;
 }
 
@@ -139,12 +150,10 @@ button {
   height: 5.1rem;
   margin: 0.5rem 0.3rem 0.5rem 0.3rem;
   border-radius: 100%;
-  /* background-color: #f4f4f4; */
 }
 
 .category-list {
   display: flex;
-  /* flex-wrap: nowrap; */
   overflow-x: auto;
 
   .work-related, .shopping, .entertainment, .finance, .family, .health {
@@ -163,6 +172,8 @@ button {
   background-repeat: no-repeat;
   background-size: contain;
   border: 1px solid #FFB23F;
+  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
+
 }
 .c2 {
   background-image: url('https://i.postimg.cc/7Lks5QjD/undraw-empty-cart-co35.png');
@@ -170,6 +181,7 @@ button {
   background-repeat: no-repeat;
   background-size: contain;
   border: 1px solid #FFB23F;
+  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
 }
 .c3 {
   background-image: url('https://i.postimg.cc/hvj3Sz6d/undraw-family-vg76.png');
@@ -177,6 +189,7 @@ button {
   background-repeat: no-repeat;
   background-size: contain;
   border: 1px solid #FFB23F;
+  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
 }
 .c4 {
   background-image: url('https://i.postimg.cc/qMNZSK8f/undraw-Personal-trainer-re-cnua.png');
@@ -184,6 +197,7 @@ button {
   background-repeat: no-repeat;
   background-size: contain;
   border: 1px solid #FFB23F;
+  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
 }
 .c5 {
   background-image: url('https://i.postimg.cc/13675ZCJ/undraw-Having-fun-re-vj4h.png');
@@ -191,6 +205,7 @@ button {
   background-repeat: no-repeat;
   background-size: contain;
   border: 1px solid #FFB23F;
+  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
 }
 .c6  {
   background-image: url('https://i.postimg.cc/sf6NTmG9/undraw-Investing-re-bov7.png');
@@ -198,15 +213,17 @@ button {
   background-repeat: no-repeat;
   background-size: contain;
   border: 1px solid #FFB23F;
+  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
 }
 
 .single-task {
-  background-color: #f5f5f5;
+  background-color: #fff;
   width: 22rem;
   height: 6rem;
   margin: 2rem auto;
   position: relative;
   border-left: 1.2rem solid #FFB23F;
+  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
 }
 
 .single-task::before {
@@ -231,6 +248,6 @@ span {
 }
 
 .progress {
-  background-color: #f5f5f5;
+  background-color: #fff;
 }
 </style>

@@ -23,12 +23,12 @@ export default {
   }
 
   nav {
-    background-color: #F4F4F4;
+    background-color: #fff;
     padding: 0;
   }
 
   ul {
-    background-color: #F4F4F4;
+    background-color: #fff;
   }
 
   li {
