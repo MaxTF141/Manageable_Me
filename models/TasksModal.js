@@ -5,10 +5,12 @@ const Tasks = function(task) {
     this.TaskTitle = task.TaskTitle;
     this.TaskDescription = task.TaskDescription;
     this.DueDate = task.DueDate;
+    this.Category = task.Category;
+    this.CategoryColor = task.CategoryColor;
 };
 
 Tasks.create = (UserID, task, result) => {
-  sql.query("INSERT INTO Tasks (UserID, TaskTitle, TaskDescription, DueDate, CreatedAt, UpdatedAt) VALUES(?, ?, ?, ?, current_date(), current_date())", [UserID, task.TaskTitle, task.TaskDescription, task.DueDate], (err, res) => {
+  sql.query("INSERT INTO Tasks (UserID, TaskTitle, TaskDescription, DueDate, CreatedAt, UpdatedAt, Category, CategoryColor) VALUES(?, ?, ?, ?, current_date(), current_date(), ?, ?)", [UserID, task.TaskTitle, task.TaskDescription, task.DueDate, task.Category, task.CategoryColor], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
