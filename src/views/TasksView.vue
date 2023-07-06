@@ -1,14 +1,14 @@
 <template>
   <section id="task" class=" d-flex justify-content-center flex-column">
     <header>
-      <h1>Hey, Max</h1>
+      <h1>Hey</h1>
       <div class="search-bar d-flex justify-content-center gap-2 align-items-center">
         <input type="search" placeholder="Search your tasks">
         <button><Icon class="searchBtn" icon="ic:sharp-search" color="#ffff" /></button>
       </div>
     </header>
     <div class="categories">
-      <h2>Categories</h2>
+      <h2 class="my-3 ms-3">Categories</h2>
       <div class="category-list gap-2">
         <div class="work-related d-inline-flex flex-column align-items-center">
           <div class="circle c1"></div>
@@ -37,23 +37,25 @@
       </div>
     </div>
     <div class="tasks-list">
-      <h2>Your Tasks</h2>
-      <div class="single-task mx-auto d-flex flex-column justify-content-between">
-        <h3 class="pt-3 ps-4">Research Accommodations</h3>
-        <div class="icon-list d-flex justify-content-between w-75 gap-5 ps-4">
-          <div class="subtasks d-flex align-items-end">
-            <Icon icon="mdi:subtasks" color="#ffb23f" style="font-size: 1.5rem;"/>
-            <h4>6</h4>
-          </div>
+      <div class="task-heading d-flex justify-content-between align-items-center m-3">
+        <h2 class="">Your Tasks</h2>
+        <button><Icon class="add-button" icon="uil:plus" color="white" /></button>
+      </div>
+      <div v-for="task in tasks" :key="task.TaskID" class="single-task mx-auto ">
+        <router-link class="single-link d-flex flex-column justify-content-between p-2 h-100" :to="{name: 'tasks', params: {id: task.TaskID}}">
+        <h3 class="">{{ task.TaskTitle }}</h3>
+        <h4>Progress: <span>78%</span></h4>
+        <div class="icon-list d-flex justify-content-between gap-5">
           <div class="due-date d-flex align-items-end">
-            <Icon icon="fluent-mdl2:date-time" color="#ffb23f" style="font-size: 1.5rem;"/>
-            <h4>30 Jun 2023</h4>
+            <Icon icon="fluent-mdl2:date-time" color="#ffb23f" style="font-size: 1.3rem;"/>
+            <h4>{{ formatDate(task.DueDate) }}</h4>
+          </div>
+          <div class="subtasks d-flex align-items-end">
+            <Icon icon="mdi:subtasks" color="#ffb23f" style="font-size: 1.4rem;"/>
+            <h4>{{ getSubtaskCount(task) }}</h4>
           </div>
         </div>
-        <div class="progress d-flex justify-content-between">
-          <h5 class="ps-1 pb-5">Your progress</h5>
-          <h5><span class="pe-1 pb-2">78%</span></h5>
-        </div>
+      </router-link>
       </div>
       <div class="single-task mx-auto">
 
@@ -73,7 +75,35 @@ import { Icon } from '@iconify/vue';
 export default {
   components: {
     Icon,
-  }
+  },
+  props: 'id',
+  computed: {
+    tasks() {
+      return this.$store.state.tasks;
+    },
+    subtasks() {
+      console.log(this.$store.state.subtasks)
+      return this.$store.state.subtasks
+    }
+  },
+  mounted(){
+    this.$store.dispatch('getTasks');
+    this.$store.dispatch('getSubtasks')
+  },
+  methods: {
+  formatDate(dateStr) {
+    const date = new Date(dateStr);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleString('en-UK', options);
+  },
+  getSubtaskCount(task) {
+      if (!this.subtasks || !Array.isArray(this.subtasks)) {
+        return 0;
+      }
+      return this.subtasks.filter(subtask => subtask.TaskID === task.TaskID).length;
+    }
+}
+
 }
 </script>
 <style scoped>
@@ -99,7 +129,6 @@ h2 {
   font-family: 'Comfortaa', cursive;
   font-size: 1.25rem;
   font-weight: 300;
-  margin: 2rem 0 1rem 1rem;
 }
 
 h3{
@@ -159,7 +188,6 @@ button {
   .work-related, .shopping, .entertainment, .finance, .family, .health {
     text-align: center;
   }
-
 }
 
   .category-list::-webkit-scrollbar {
@@ -168,6 +196,7 @@ button {
 
 .c1 {
   background-image: url('https://i.postimg.cc/L5bQh4F0/undraw-Working-remotely-re-6b3a-1.png');
+  background-color: #fff;
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -223,31 +252,29 @@ button {
   margin: 2rem auto;
   position: relative;
   border-left: 1.2rem solid #FFB23F;
-  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
-}
-
-.single-task::before {
-  content: '';
-  width: 20.8rem;
-  height: 0.2rem;
-  background-color: #9B9B9B;
-  position: absolute;
-  bottom: 0;
-}
-.single-task::after {
-  content: '';
-  width: 14.96rem;
-  height: 0.2rem;
-  background-color: #FFB23F;
-  position: absolute;
-  bottom: 0;
+  box-shadow: 0.2rem 0.2rem 0.6rem -0.3rem #00000031,
+              -10px 0px 10px -10px #FFB23F;
 }
 
 span {
   color: #ffb23f;
 }
 
-.progress {
-  background-color: #fff;
+span {
+  color: #ffb23f;
+}
+
+a.router-link {
+  text-decoration: none;
+  color: black;
+}
+
+.single-link{
+  text-decoration: none;
+  color: #000;
+}
+
+.add-button{
+  font-size: 2rem;
 }
 </style>
