@@ -5,12 +5,11 @@ const Tasks = function(task) {
     this.TaskTitle = task.TaskTitle;
     this.TaskDescription = task.TaskDescription;
     this.DueDate = task.DueDate;
-    this.Category = task.Category;
-    this.CategoryColor = task.CategoryColor;
+    this.CategoryID = task.CategoryID;
 };
 
 Tasks.create = (UserID, task, result) => {
-  sql.query("INSERT INTO Tasks (UserID, TaskTitle, TaskDescription, DueDate, CreatedAt, UpdatedAt, Category, CategoryColor) VALUES(?, ?, ?, ?, current_date(), current_date(), ?, ?)", [UserID, task.TaskTitle, task.TaskDescription, task.DueDate, task.Category, task.CategoryColor], (err, res) => {
+  sql.query("INSERT INTO Tasks (UserID, TaskTitle, TaskDescription, DueDate, CreatedAt, UpdatedAt, CategoryID) VALUES(?, ?, ?, ?, current_date(), current_date(), ?)", [UserID, task.TaskTitle, task.TaskDescription, task.DueDate, task.CategoryID], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -42,7 +41,11 @@ Tasks.findById = (id, result) => {
 };
 
 Tasks.getAll = (id, result) => {
-  sql.query(`SELECT * FROM Tasks WHERE UserID = ? `, [id], (err, res) => {
+  sql.query(`SELECT t.*, c.CategoryColor, c.CategoryName
+            FROM Tasks t
+            INNER JOIN Categories c ON t.CategoryID = c.CategoryID
+            WHERE UserID = ?;
+  `, [id], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
