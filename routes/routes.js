@@ -35,15 +35,15 @@ module.exports = app => {
     
     // Tasks  routes
     const tasks = require('../controllers/TasksController.js');
-    router.post("/user/:user/tasks/", verifyAToken, requireAuth, tasks.create);
+    router.post("/user/:user/tasks", tasks.create);
   
     router.get("/user/:user/tasks", tasks.findAll);
 
     router.get("/user/:user/tasks/:task", tasks.findOne);
   
-    router.put("/user/:user/tasks/:task", verifyAToken, requireAuth, tasks.update);
+    router.put("/user/:user/tasks/:task", tasks.update);
   
-    router.delete("/user/:user/tasks/:task", verifyAToken, requireAuth, tasks.delete);
+    router.delete("/user/:user/tasks/:task", tasks.delete);
 
     
     // Subtasks routes
