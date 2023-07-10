@@ -60,3 +60,8 @@ module.exports = app => {
 
     app.use('/', router);
   };
+
+  // Categories routes 
+  const categories = require('../controllers/CategoriesController.js');
+
+  router.post("/tasks/categories", categories.findAll);
