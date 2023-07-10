@@ -58,10 +58,11 @@ module.exports = app => {
   
     router.delete("/user/:user/tasks/:task/sub/:sub", verifyAToken, requireAuth, subtasks.delete);
 
+    
+    // Categories routes 
+    const categories = require('../controllers/CategoriesController.js'); 
+    router.post("/tasks/categories", categories.findAll);
+
+
     app.use('/', router);
   };
-
-  // Categories routes 
-  const categories = require('../controllers/CategoriesController.js');
-
-  router.post("/tasks/categories", categories.findAll);
