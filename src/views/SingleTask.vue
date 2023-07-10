@@ -1,21 +1,25 @@
 <template>
     <section id="single-task">
-        <form action="" @submit.prevent="AddTask">
+        <form action="" @submit.prevent="addTask()">
             <div class="row">
                 <div class="col-4">
-                    <label for="">Title</label>
+                    <label for="">Title:</label>
                 </div>
                 <div class="col-8">
-                    <input type="text">
+                    <input type="text" v-model="add.TaskTitle">
                 </div>
             </div>
             <div class="row">
-                <label for="">Description</label>
-                <input type="message">
+                <div class="col-4">
+                    <label for="">Description</label>
+                </div>
+                <div class="col-8">
+                    <textarea type="message" v-model="add.TaskDescription"></textarea>
+                </div>
             </div>
             <div class="row">
-                <label for="">Due Date</label>
-                <select name="category" id="category">
+                <label for="">Category</label>
+                <select name="category" id="category" v-model="add.Category">
                     <option value="work-related">Work-related</option>
                     <option value="shopping">Shopping</option>
                     <option value="family-household">Family and Household</option>
@@ -25,42 +29,32 @@
                 </select>
             </div>
             <div class="row">
-                <label for="">Pick your color</label>
-                <datalist id="colors">
-                    <option value="#4169E1">Royal Blue</option>
-                    <option value="#DC143C">Crimson</option>
-                    <option value="#FF6347">Tomato</option>
-                    <option value="#FFE4B5">Mocassin</option>
-                    <option value="#228B22">Forest Green</option>
-                    <option value="#48D1CC">Medium Turqoise</option>
-                    <option value="#663399">Rebecca Purple</option>
-                    <option value="#FF1493">Deep Pink</option>
-                    <option value="#F5FFFA">Mint Cream</option>
-                    <option value="#201D24">Black</option>
-                </datalist>
-                <input list="colors" type="color" value="#fffff">
+                <label>Due Date:</label>
+                <input type="date" v-model="add.DueDate"/>
             </div>
+            <button type="submit" class="button  mb-4">Add</button>
         </form>
     </section>
 </template>
 <script>
 export default {
-    
+    data() {
+        return {
+            add: {
+                TaskTitle: '',
+                TaskDescription: '',
+                Category: '',
+                DueDate: ''
+            }
+        }
+    },
+    methods: {
+        addTask() {
+            this.$store.dispatch('addTask', this.add)
+        }
+    }
 }
 </script>
 <style>
-    .option1 {
-        background-color: #FFB23F;
-        width: 30px;
-    }
-    .option2 {
-        background-color: #EE1A1A;
-    }
-    .option3 {
-        background-color: #D01AEE;
-    }
-    .option4 {
-        background-color: #74BB1B;
-    }
     
 </style>

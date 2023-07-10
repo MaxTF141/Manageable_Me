@@ -10,38 +10,18 @@
     <div class="categories">
       <h2 class="my-3 ms-3">Categories</h2>
       <div class="category-list gap-2">
-        <div class="work-related d-inline-flex flex-column align-items-center">
-          <div class="circle c1"></div>
-          <h4>Work-related</h4>
-        </div>
-        <div class="shopping d-inline-flex flex-column align-items-center">
-          <div class="circle c2"></div>
-          <h4>Shopping</h4>
-        </div>
-        <div class="family d-inline-flex flex-column align-items-center">
-          <div class="circle c3"></div>
-          <h4>Family and Household</h4>
-        </div>
-        <div class="health d-inline-flex flex-column align-items-center">
-          <div class="circle c4"></div>
-          <h4>Health and Fitness</h4>
-        </div>
-        <div class="entertainment d-inline-flex flex-column align-items-center">
-          <div class="circle c5"></div>
-          <h4>Social and Entertainment</h4>
-        </div>
-        <div class="finance d-inline-flex flex-column align-items-center flex-wrap">
-          <div class="circle c6"></div>
-          <h4>Financial Management</h4>
+        <div class="text-center d-inline-flex flex-column align-items-center" v-for="category in categories" :key="category.CategoryID">
+          <img class="image" :src="category.CategoryImage" alt="" :style="`border: 3px solid ${category.CategoryColor};`">
+          <h4 class="">{{category.CategoryName}}</h4>
         </div>
       </div>
     </div>
     <div class="tasks-list">
       <div class="task-heading d-flex justify-content-between align-items-center m-3">
         <h2 class="">Your Tasks</h2>
-        <button><Icon class="add-button" icon="uil:plus" color="white" /></button>
+        <button><router-link to="/singleTask"><Icon class="add-button" icon="uil:plus" color="white" /></router-link></button>
       </div>
-      <div v-for="task in tasks" :key="task.TaskID" class="single-task mx-auto ">
+      <div v-for="task in tasks" :key="task.TaskID" class="single-task mx-auto" :style="`border-left: 1.2rem solid ${task.CategoryColor};`">
         <router-link class="single-link d-flex flex-column justify-content-between p-2 h-100" :to="{name: 'tasks', params: {id: task.TaskID}}">
         <h3 class="">{{ task.TaskTitle }}</h3>
         <h4>Progress: <span>78%</span></h4>
@@ -57,15 +37,6 @@
         </div>
       </router-link>
       </div>
-      <div class="single-task mx-auto">
-
-      </div>
-      <div class="single-task mx-auto">
-
-      </div>
-      <div class="single-task mx-auto">
-
-      </div>
     </div>
   </section>
 </template>
@@ -78,17 +49,25 @@ export default {
   },
   props: 'id',
   computed: {
+
+    categories() {
+     console.log(this.$store.state.categories)
+     return this.$store.state.categories
+    },
     tasks() {
+      console.log(this.$store.state.tasks);
       return this.$store.state.tasks;
     },
     subtasks() {
       console.log(this.$store.state.subtasks)
       return this.$store.state.subtasks
-    }
+    },
+
   },
   mounted(){
+    this.$store.dispatch('getCategories');
     this.$store.dispatch('getTasks');
-    this.$store.dispatch('getSubtasks')
+    this.$store.dispatch('getSubtasks');
   },
   methods: {
   formatDate(dateStr) {
@@ -97,6 +76,12 @@ export default {
     return date.toLocaleString('en-UK', options);
   },
   getSubtaskCount(task) {
+      if (!this.subtasks || !Array.isArray(this.subtasks)) {
+        return 0;
+      }
+      return this.subtasks.filter(subtask => subtask.TaskID === task.TaskID).length;
+    },
+    CategoryColor(task) {
       if (!this.subtasks || !Array.isArray(this.subtasks)) {
         return 0;
       }
@@ -194,55 +179,12 @@ button {
     display: none;
   }
 
-.c1 {
-  background-image: url('https://i.postimg.cc/L5bQh4F0/undraw-Working-remotely-re-6b3a-1.png');
-  background-color: #fff;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  border: 1px solid #FFB23F;
-  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
-
-}
-.c2 {
-  background-image: url('https://i.postimg.cc/7Lks5QjD/undraw-empty-cart-co35.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  border: 1px solid #FFB23F;
-  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
-}
-.c3 {
-  background-image: url('https://i.postimg.cc/hvj3Sz6d/undraw-family-vg76.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  border: 1px solid #FFB23F;
-  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
-}
-.c4 {
-  background-image: url('https://i.postimg.cc/qMNZSK8f/undraw-Personal-trainer-re-cnua.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  border: 1px solid #FFB23F;
-  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
-}
-.c5 {
-  background-image: url('https://i.postimg.cc/13675ZCJ/undraw-Having-fun-re-vj4h.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  border: 1px solid #FFB23F;
-  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
-}
-.c6  {
-  background-image: url('https://i.postimg.cc/sf6NTmG9/undraw-Investing-re-bov7.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  border: 1px solid #FFB23F;
-  box-shadow: 0.2rem 0.2rem 0.6rem -0.1rem #00000031;
+  .image {
+    width: 5.1rem;
+    height: 5.1rem;
+    display: block;
+    border-radius: 50px;
+    border: 3px solid #198754;
 }
 
 .single-task {
