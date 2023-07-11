@@ -6,6 +6,7 @@ const Tasks = function(task) {
     this.TaskDescription = task.TaskDescription;
     this.DueDate = task.DueDate;
     this.CategoryID = task.CategoryID;
+    this.CategoryColor = task.CategoryColor;
 };
 
 Tasks.create = (UserID, task, result) => {
