@@ -14,7 +14,7 @@ exports.create = (req, res) => {
         TaskTitle: req.body.TaskTitle,
         TaskDescription: req.body.TaskDescription,
         DueDate: req.body.DueDate,
-        Category: req.body.Category,
+        CategoryID: req.body.CategoryID,
         CategoryColor: req.body.CategoryColor
     });
 

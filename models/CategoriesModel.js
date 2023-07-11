@@ -4,6 +4,7 @@ const sql = require("./db.js");
 const Category = function(category) {
     this.CategoryName = user.CategoryName;
     this.CategoryColor = user.CategoryColor;
+    this.CategoryImage - user.CategoryImage;
 };
 
 Category.getAll = (result) => {
