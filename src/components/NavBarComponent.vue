@@ -1,5 +1,5 @@
 <template>
-  <header class="fixed-bottom">
+  <header class="sticky-bottom">
     <nav>
       <ul class="nav d-flex justify-content-around ">
         <router-link to="/"><Icon class="icon" icon="ci:list-checklist" color="#4d8ab2" /></router-link>

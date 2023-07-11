@@ -29,6 +29,7 @@ export default createStore({
   actions: {
     async getTasks(context) {
       const res = await axios.get(`${api}user/2/tasks/`)
+      console.log(res.data)
       context.commit('setTasks', res.data)
     },
     async getSubtasks(context) {
@@ -38,13 +39,8 @@ export default createStore({
     },
     async addTask(context, payload) {
       const res = await axios.post(`${api}user/2/tasks/`, payload);
-      const {result, err} = await res.data;
-      if(err) {
-        context.commit('setMessage', err);
-      } else {
-        context.commit('setTasks', result);
-        console.log(result)
-      }
+        context.commit('setTasks', res);
+        console.log(res)
     },
     async getCategories(context) {
       const res = await axios.post(`${api}tasks/categories`);
