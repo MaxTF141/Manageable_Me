@@ -9,20 +9,22 @@
     </header>
     <div class="categories">
       <h2 class="my-3 ms-3">Categories</h2>
-      <div class="category-list gap-2">
-        <div class="text-center d-inline-flex flex-column align-items-center" v-for="category in categories" :key="category.CategoryID">
-          <img class="image" :src="category.CategoryImage" alt="" :style="`border: 3px solid ${category.CategoryColor};`">
-          <h4 class="">{{category.CategoryName}}</h4>
+      <div class="category-list gap-2 d-flex">
+        <div class=" text-center d-inline-flex flex-column align-items-center" v-for="category in categories" :key="category.CategoryID" @click="filterTasksByCategory(category)">
+          <div :class="categoryClass(category)" :style="overlayBorderStyling(category)">
+            <img class="image" :src="category.CategoryImage" alt="" :style="imageBorderStyling(category)">
+          </div>
+          <h4 class="">{{category.CategoryName}}</h4> 
         </div>
       </div>
     </div>
-    <div class="tasks-list">
+    <div class="tasks-list" v-if="filteredTasks && filteredTasks.length">
       <div class="task-heading d-flex justify-content-between align-items-center m-3">
         <h2 class="">Your Tasks</h2>
-        <button><router-link to="/singleTask"><Icon class="add-button" icon="uil:plus" color="white" /></router-link></button>
+        <button><router-link to="/addTask"><Icon class="add-button" icon="uil:plus" color="white" /></router-link></button>
       </div>
-      <div v-for="task in tasks" :key="task.TaskID" class="single-task mx-auto" :style="`border-left: 1.2rem solid ${task.CategoryColor}; box-shadow: -10px 0px 10px -10px ${task.CategoryColor};`">
-        <router-link class="single-link d-flex flex-column justify-content-between p-2 h-100" :to="{name: 'tasks', params: {id: task.TaskID}}">
+      <div v-for="task in filteredTasks" :key="task.TaskID" class="single-task mx-auto" :style="borderStyling(task)">
+        <router-link class="single-link d-flex flex-column justify-content-between p-2 h-100" :to="{name: 'tasks', params: {id: task.TaskID}}" >
         <h3 class="">{{ task.TaskTitle }}</h3>
         <h4>Progress: <span>78%</span></h4>
         <div class="icon-list d-flex justify-content-between gap-5">
@@ -38,6 +40,9 @@
       </router-link>
       </div>
     </div>
+    <div class="empty mt-5" v-else>
+      <h2 class="w-75 text-center mx-auto">No Task found in this category :(</h2>
+    </div>
   </section>
 </template>
 <script>
@@ -48,21 +53,31 @@ export default {
     Icon,
   },
   props: 'id',
+  data() {
+    return {
+      currentCategory: null,
+      categoryActive: true
+    }
+  },
   computed: {
 
     categories() {
-     console.log(this.$store.state.categories)
      return this.$store.state.categories
     },
     tasks() {
-      console.log(this.$store.state.tasks);
       return this.$store.state.tasks;
     },
     subtasks() {
-      console.log(this.$store.state.subtasks)
       return this.$store.state.subtasks
     },
-
+    filteredTasks() {
+      if (this.currentCategory) {
+        return this.tasks.filter(task =>
+        task.CategoryName === this.currentCategory
+        );
+      }
+      return this.tasks;
+    },
   },
   mounted(){
     this.$store.dispatch('getCategories');
@@ -76,14 +91,30 @@ export default {
       return date.toLocaleString('en-UK', options);
     },
     getSubtaskCount(task) {
-        if (!this.subtasks || !Array.isArray(this.subtasks)) {
-          return 0;
-        }
-        return this.subtasks.filter(subtask => subtask.TaskID === task.TaskID).length;
+      if (!this.subtasks || !Array.isArray(this.subtasks)) {
+        return 0;
+      }
+      return this.subtasks.filter(subtask => subtask.TaskID === task.TaskID).length;
     },
-      CategoryColor(task) {
-      return this.categories.find(category => category.CategoryID === task.CategoryID)?.Category || '';
-  }
+    filterTasksByCategory(category) {
+      this.currentCategory = category.CategoryName;
+      const ret = this.filteredTasks.every((x) => x.CategoryName === this.currentCategory);
+      console.log(ret)
+      return ret;
+    },
+    borderStyling(task) {
+      return `border-left: 1.2rem solid ${task.CategoryColor}; 
+              box-shadow: -10px 0px 10px -10px ${task.CategoryColor};`
+    },
+    categoryClass(category) {
+      return category.CategoryName === this.currentCategory? 'overlay' : null;
+    },
+    overlayBorderStyling(category){
+      return `border: 3px solid ${category.CategoryName == this.currentCategory? category.CategoryColor : null };`
+    },
+    imageBorderStyling(category) {
+      return `${category.CategoryName == this.currentCategory? null : `border: 3px solid ${category.CategoryColor};` }`
+    }
 }
 
 }
@@ -164,7 +195,6 @@ button {
 }
 
 .category-list {
-  display: flex;
   overflow-x: auto;
 
   .work-related, .shopping, .entertainment, .finance, .family, .health {
@@ -181,7 +211,6 @@ button {
     height: 5.1rem;
     display: block;
     border-radius: 50px;
-    border: 3px solid #198754;
 }
 
 .single-task {
@@ -216,4 +245,31 @@ a.router-link {
 .add-button{
   font-size: 2rem;
 }
+
+.overlay {
+  position: relative;
+  border-radius: 50px;
+}
+
+.overlay::after {
+  content: "";
+  position: absolute;
+  border-radius: 50px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #00000080; /* Adjust the overlay color and transparency as needed */
+  z-index: 1; /* Increase the z-index value to place the overlay above the image */
+}
+
+/* .active {
+  position: relative;
+}
+
+.active  {
+  position: relative;
+  z-index: 0;
+} */
+
 </style>

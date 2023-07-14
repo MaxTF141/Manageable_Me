@@ -6,6 +6,7 @@ const api = 'https://manageable-me.onrender.com/'
 export default createStore({
   state: {
     tasks: null,
+    task: null,
     subtasks: null,
     message: null,
     categories: null
@@ -14,6 +15,9 @@ export default createStore({
   mutations: {
     setTasks(state, tasks) {
       state.tasks = tasks
+    },
+    setTask(state, task) {
+      state.task = task
     },
     setSubtasks(state, subtasks) {
       state.subtasks = subtasks
@@ -29,23 +33,23 @@ export default createStore({
   actions: {
     async getTasks(context) {
       const res = await axios.get(`${api}user/2/tasks/`)
-      console.log(res.data)
       context.commit('setTasks', res.data)
+    },
+    async getTask(context, id) {
+      const res = await axios.get(`${api}user/2/tasks/${id}`)
+      context.commit('setTask', res.data)
     },
     async getSubtasks(context) {
       const res = await axios.get(`${api}user/2/tasks/19/sub`)
-      console.log(res.data)
       context.commit('setSubtasks', res.data)
     },
     async addTask(context, payload) {
       const res = await axios.post(`${api}user/2/tasks/`, payload);
         context.commit('setTasks', res);
-        console.log(res)
     },
     async getCategories(context) {
       const res = await axios.post(`${api}tasks/categories`);
       context.commit('setCategories', res.data);
-      console.log(res.data);
     }
   },
   modules: {

@@ -1,5 +1,5 @@
 <template>
-  <router-view/>
+  <router-view class="page"></router-view>
   <NavBar />
 </template>
 
@@ -26,5 +26,7 @@ export default {
     margin: 0;
     box-sizing: border-box;
   }
-
+#task, #single-task, #notes, #profile{
+  margin-bottom: 94px;
+}
 </style>
