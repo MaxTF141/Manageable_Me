@@ -3,6 +3,9 @@ const sql = require('./db.js');
 
 const Subtasks = function(subtask) {
     this.SubDescription = subtask.SubDescription;
+    this.TaskID = subtask.TaskID;
+    this.isDone = subtask.isDone;
+
 };
 
 Subtasks.create = (id, subtask, result) => {
@@ -49,7 +52,7 @@ Subtasks.getAll = (taskID, result) => {
 };
 
 Subtasks.updateById = (id, subtask, result) => {
-    sql.query('UPDATE Subtask SET subDescription = ? WHERE SubtaskID = ?', [subtask.subDescription, id], (err, res) => {
+    sql.query('UPDATE Subtask SET subDescription = ?, isDone = ?, TaskID = ? WHERE SubtaskID = ?', [subtask.subDescription, id], (err, res) => {
         if(err) {
             console.log('error: ', err);
             result(err, null);
