@@ -15,7 +15,8 @@ exports.create = (req, res) => {
         TaskDescription: req.body.TaskDescription,
         DueDate: req.body.DueDate,
         CategoryID: req.body.CategoryID,
-        CategoryColor: req.body.CategoryColor
+        CategoryColor: req.body.CategoryColor,
+        Priority: req.body.Priority
     });
 
     // Save Task in the database

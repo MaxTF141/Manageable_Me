@@ -7,10 +7,11 @@ const Tasks = function(task) {
     this.DueDate = task.DueDate;
     this.CategoryID = task.CategoryID;
     this.CategoryColor = task.CategoryColor;
+    this.Priority = task.Priority;
 };
 
 Tasks.create = (UserID, task, result) => {
-  sql.query("INSERT INTO Tasks (UserID, TaskTitle, TaskDescription, DueDate, CreatedAt, UpdatedAt, CategoryID) VALUES(?, ?, ?, ?, current_date(), current_date(), ?)", [UserID, task.TaskTitle, task.TaskDescription, task.DueDate, task.CategoryID], (err, res) => {
+  sql.query("INSERT INTO Tasks (UserID, TaskTitle, TaskDescription, DueDate, CreatedAt, UpdatedAt, Priority, CategoryID) VALUES(?, ?, ?, ?, current_date(), current_date(), ?, ?)", [UserID, task.TaskTitle, task.TaskDescription, task.DueDate, task.CategoryID], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -23,7 +24,10 @@ Tasks.create = (UserID, task, result) => {
 };
 
 Tasks.findById = (id, result) => {
-  sql.query(`SELECT * FROM Tasks WHERE TaskID = ?`, [id], (err, res) => {
+  sql.query(`SELECT t.*, c.CategoryColor, c.CategoryName
+  FROM Tasks t
+  INNER JOIN Categories c ON t.CategoryID = c.CategoryID
+  WHERE TaskID = ?;`, [id], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -59,7 +63,7 @@ Tasks.getAll = (id, result) => {
 };
 
 Tasks.updateById = (id, task, result) => {
-    sql.query('UPDATE Tasks SET TaskTitle = ?, TaskDescription = ?, DueDate = ?, UpdatedAt = current_time() WHERE TaskID = ?', [task.TaskTitle, task.TaskDescription, task.DueDate, id],
+    sql.query('UPDATE Tasks SET TaskTitle = ?, TaskDescription = ?, DueDate = ?, UpdatedAt = current_time(), Priority = ? WHERE TaskID = ?', [task.TaskTitle, task.TaskDescription, task.DueDate, task.Priority, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
