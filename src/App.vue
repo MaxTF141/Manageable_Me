@@ -29,4 +29,36 @@ export default {
 #task, #single-task, #notes, #profile{
   margin-bottom: 94px;
 }
+
+h1 {
+  font-family: 'Comfortaa', cursive;
+  font-size: 2.25rem;
+  font-weight: 400;
+  margin: 1rem 0 2rem 1rem;
+}
+
+h2 {
+  font-family: 'Comfortaa', cursive;
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+h3{
+  font-family: 'Comfortaa', cursive;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+h4{
+  font-family: 'Comfortaa', cursive;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+h5{
+  font-family: 'Comfortaa', cursive;
+  font-size: 0.7rem;
+  font-weight: 400;
+}
+
 </style>

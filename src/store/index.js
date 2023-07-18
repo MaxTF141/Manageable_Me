@@ -8,6 +8,7 @@ export default createStore({
     tasks: null,
     task: null,
     subtasks: null,
+    updatedSubtask: null,
     message: null,
     categories: null
   },
@@ -21,6 +22,9 @@ export default createStore({
     },
     setSubtasks(state, subtasks) {
       state.subtasks = subtasks
+    },
+    updateSubtask(state, updatedSubtask) {
+      state.updatedSubtask = updatedSubtask
     },
     setMessage(state, message) {
       state.message = message
@@ -39,13 +43,18 @@ export default createStore({
       const res = await axios.get(`${api}user/2/tasks/${id}`)
       context.commit('setTask', res.data)
     },
-    async getSubtasks(context) {
-      const res = await axios.get(`${api}user/2/tasks/19/sub`)
+    async getSubtasks(context, id) {
+      const res = await axios.get(`${api}user/2/tasks/${id}/sub`)
       context.commit('setSubtasks', res.data)
+    },
+    async updateSubtask(context, {taskID, subtaskID, payload}) {
+      const res = await axios.get(`${api}user/2/tasks/${taskID}/sub/${subtaskID}`, payload)
+      console.log(taskID, subtaskID, payload)
+      context.commit('updateSubtask', res.data)
     },
     async addTask(context, payload) {
       const res = await axios.post(`${api}user/2/tasks/`, payload);
-        context.commit('setTasks', res);
+        context.commit('setTasks', res);  
     },
     async getCategories(context) {
       const res = await axios.post(`${api}tasks/categories`);
