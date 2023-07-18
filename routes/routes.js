@@ -48,15 +48,15 @@ module.exports = app => {
     
     // Subtasks routes
     const subtasks = require('../controllers/SubTaskController.js');
-    router.post("/user/:user/tasks/:task/sub", verifyAToken, requireAuth, subtasks.create);
+    router.post("/user/:user/tasks/:task/sub", subtasks.create);
   
     router.get("/user/:user/tasks/:task/sub", subtasks.findAll);
 
     router.get("/user/:user/tasks/:task/sub/:sub", subtasks.findOne);
   
-    router.put("/user/:user/tasks/:task/sub/:sub", verifyAToken, requireAuth, subtasks.update);
+    router.put("/user/:user/tasks/:task/sub/:sub", subtasks.update);
   
-    router.delete("/user/:user/tasks/:task/sub/:sub", verifyAToken, requireAuth, subtasks.delete);
+    router.delete("/user/:user/tasks/:task/sub/:sub",   subtasks.delete);
 
     
     // Categories routes 
