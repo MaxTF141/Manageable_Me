@@ -2,15 +2,23 @@ import { createStore } from 'vuex'
 import axios from 'axios'
 
 const api = 'https://manageable-me.onrender.com/'
+// const api = 'http://localhost:1234/'
 
 export default createStore({
   state: {
     tasks: null,
     task: null,
     subtasks: null,
+    subtasksData: null,
     updatedSubtask: null,
     message: null,
     categories: null
+  },
+
+  getters :{
+    getSubtaskLength: (state) => (taskID) => {
+      return state.subtasksData.filter((subtask) => subtask.TaskID === taskID).length;
+    },
   },
 
   mutations: {
@@ -48,8 +56,7 @@ export default createStore({
       context.commit('setSubtasks', res.data)
     },
     async updateSubtask(context, {taskID, subtaskID, payload}) {
-      const res = await axios.get(`${api}user/2/tasks/${taskID}/sub/${subtaskID}`, payload)
-      console.log(taskID, subtaskID, payload)
+      const res = await axios.put(`${api}user/2/tasks/${taskID}/sub/${subtaskID}`, payload)
       context.commit('updateSubtask', res.data)
     },
     async addTask(context, payload) {

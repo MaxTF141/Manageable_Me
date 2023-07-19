@@ -24,9 +24,9 @@
         <button><router-link to="/addTask"><Icon class="add-button" icon="uil:plus" color="white" /></router-link></button>
       </div>
       <div v-for="task in filteredTasks" :key="task.TaskID" class="single-task mx-auto" :style="borderStyling(task)">
-        <router-link class="single-link d-flex flex-column justify-content-between p-2 h-100" :to="{name: 'tasks', params: {id: task.TaskID}}" >
+        <router-link class="single-link d-flex flex-column justify-content-evenly p-2 h-100" :to="{name: 'tasks', params: {id: task.TaskID}}" >
         <h3 class="">{{ task.TaskTitle }}</h3>
-        <h4>Progress: <span>78%</span></h4>
+        <h4>Priority: <span :style="`color: ${ task.CategoryColor };`">{{ task.Priority }}</span></h4>
         <div class="icon-list d-flex justify-content-between gap-5">
           <div class="due-date d-flex align-items-end">
             <Icon icon="fluent-mdl2:date-time" :color="task.CategoryColor" style="font-size: 1.3rem;"/>
@@ -34,7 +34,7 @@
           </div>
           <div class="subtasks d-flex align-items-end">
             <Icon icon="mdi:subtasks" :color="task.CategoryColor" style="font-size: 1.4rem;"/>
-            <h4>{{ getSubtaskCount(task) }}</h4>
+            <h4>{{ getSubtaskLength(task.TaskID)  }}</h4>
           </div>
         </div>
       </router-link>
@@ -48,6 +48,7 @@
 <script>
 
 import { Icon } from '@iconify/vue';
+import { mapGetters } from "vuex";
 export default {
   components: {
     Icon,
@@ -78,23 +79,17 @@ export default {
       }
       return this.tasks;
     },
+    ...mapGetters("subtasks", ["getSubtaskLength"]),
   },
   mounted(){
     this.$store.dispatch('getCategories');
     this.$store.dispatch('getTasks');
-    this.$store.dispatch('getSubtasks');
   },
   methods: {
     formatDate(dateStr) {
       const date = new Date(dateStr);
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return date.toLocaleString('en-UK', options);
-    },
-    getSubtaskCount(task) {
-      if (!this.subtasks || !Array.isArray(this.subtasks)) {
-        return 0;
-      }
-      return this.subtasks.filter(subtask => subtask.TaskID === task.TaskID).length;
     },
     filterTasksByCategory(category) {
       this.currentCategory = category.CategoryName;
@@ -215,7 +210,7 @@ button {
 
 .single-task {
   background-color: #fff;
-  width: 22rem;
+  width: 95vw;
   height: 6rem;
   margin: 2rem auto;
   position: relative;
