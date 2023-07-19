@@ -52,7 +52,7 @@ Subtasks.getAll = (taskID, result) => {
 };
 
 Subtasks.updateById = (id, subtask, result) => {
-    sql.query('UPDATE Subtask SET subDescription = ?, isDone = ?, TaskID = ? WHERE SubtaskID = ?', [subtask.subDescription, id], (err, res) => {
+    sql.query('UPDATE Subtask SET SubDescription = ?, isDone = ?, TaskID = ? WHERE SubtaskID = ?', [subtask.SubDescription, subtask.isDone, subtask.TaskID, id], (err, res) => {
         if(err) {
             console.log('error: ', err);
             result(err, null);
