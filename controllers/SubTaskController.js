@@ -37,6 +37,17 @@ exports.findAll = (req, res) => {
     });
 };
 
+exports.findAllTasks = (req, res) => {
+    Subtasks.getAllTasks((err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving task."
+            });
+        else res.send(data);
+    });
+};
+
 // Find a single Task with a id
 exports.findOne = (req, res) => {
     Subtasks.findById(req.params.sub , (err, data) => {

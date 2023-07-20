@@ -52,6 +52,8 @@ module.exports = app => {
   
     router.get("/user/:user/tasks/:task/sub", subtasks.findAll);
 
+    router.get("/user/:user/sub", subtasks.findAllTasks);
+
     router.get("/user/:user/tasks/:task/sub/:sub", subtasks.findOne);
   
     router.put("/user/:user/tasks/:task/sub/:sub", subtasks.update);
