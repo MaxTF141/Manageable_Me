@@ -34,7 +34,7 @@
           </div>
           <div class="subtasks d-flex align-items-end">
             <Icon icon="mdi:subtasks" :color="task.CategoryColor" style="font-size: 1.4rem;"/>
-            <h4>{{ getSubtaskLength(task.TaskID)  }}</h4>
+            <h4>{{ getSubtaskCount(task)  }}</h4>
           </div>
         </div>
       </router-link>
@@ -84,12 +84,19 @@ export default {
   mounted(){
     this.$store.dispatch('getCategories');
     this.$store.dispatch('getTasks');
+    this.$store.dispatch('getAllSubtasks');
   },
   methods: {
     formatDate(dateStr) {
       const date = new Date(dateStr);
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return date.toLocaleString('en-UK', options);
+    },
+    getSubtaskCount(task) {
+      if (!this.subtasks || !Array.isArray(this.subtasks)) {
+        return 0;
+      }
+      return this.subtasks.filter(subtask => subtask.TaskID === task.TaskID).length;
     },
     filterTasksByCategory(category) {
       this.currentCategory = category.CategoryName;

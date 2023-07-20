@@ -55,6 +55,10 @@ export default createStore({
       const res = await axios.get(`${api}user/2/tasks/${id}/sub`)
       context.commit('setSubtasks', res.data)
     },
+    async getAllSubtasks(context) {
+      const res = await axios.get(`${api}user/2/sub`)
+      context.commit('setSubtasks', res.data)
+    },
     async updateSubtask(context, {taskID, subtaskID, payload}) {
       const res = await axios.put(`${api}user/2/tasks/${taskID}/sub/${subtaskID}`, payload)
       context.commit('updateSubtask', res.data)
